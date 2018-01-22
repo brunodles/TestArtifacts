@@ -1,7 +1,5 @@
 package com.brunodles.testartifacts.task
 
-import com.brunodles.testartifacts.TestArtifactsPlugin
-import org.gradle.api.Project
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Assert
 import org.junit.Before

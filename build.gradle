@@ -1,0 +1,70 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    }
+}
+
+apply plugin: 'groovy'
+apply plugin: "net.ltgt.apt"
+
+compileGroovy {
+    groovyOptions.javaAnnotationProcessing = true
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+
+    compileOnly 'com.brunodles:autoplugin-annotation:1.1.0'
+    apt 'com.brunodles:autoplugin-processor:1.1.0'
+
+    testCompile gradleTestKit()
+    testCompile 'junit:junit:4.11'
+
+    testCompile 'org.mockito:mockito-core:2.0.54-beta'
+}
+
+ext.scripter = [
+        'gradle/scripter.gradle': 'https://raw.githubusercontent.com/brunodles/GradleHelpers/master/scripter/scripter.gradle',
+        'gradle/publish.gradle' : 'https://raw.githubusercontent.com/brunodles/GradleHelpers/master/publish/single.gradle'
+]
+
+def gitPath = "github.com/brunodles/TestArtifacts"
+ext.publishing = [
+        group          : "com.brunodles",
+        version        : '0.1.0',
+        repo           : "TempRepo",
+        name           : "TestArtifacts",
+        artifact       : "testartifacts",
+        gitPath        : gitPath,
+        site           : "https://$gitPath",
+        issueTrackerUrl: "https://$gitPath/issues",
+        tag            : 'git rev-parse --abbrev-ref HEAD'.execute().text.trim(),
+        override       : true,
+        desc           : "A gradle to send test artifacts to firebase.",
+        license        : [
+                short: "mit",
+                name : "MIT License",
+                url  : "http://www.opensource.org/licenses/mit-license.php"
+        ],
+        developer      : [
+                name : "Bruno de Lima e Silva",
+                email: "dlimaun@gmail.com"
+        ]
+]
+
+if (rootProject.file("gradle/scripter.gradle").exists())
+    apply from: rootProject.file("gradle/scripter.gradle")

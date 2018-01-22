@@ -16,7 +16,7 @@ class MergeTestArtifactsTest {
     private Project project
 
     @Before
-    def setupProject() {
+    void setupProject() {
         project = ProjectBuilder.builder().build()
         project.pluginManager.apply TestArtifactsPlugin
         (project.extensions.archiver as TestArtifactsExtension).with {

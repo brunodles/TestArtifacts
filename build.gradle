@@ -12,6 +12,7 @@ buildscript {
 
 apply plugin: 'groovy'
 apply plugin: "net.ltgt.apt"
+apply plugin: 'java-gradle-plugin'
 
 compileGroovy {
     groovyOptions.javaAnnotationProcessing = true

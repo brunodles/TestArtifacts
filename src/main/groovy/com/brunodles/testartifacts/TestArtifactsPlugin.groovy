@@ -15,8 +15,8 @@ class TestArtifactsPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         project.extensions.create(EXTENSION, TestArtifactsExtension)
-        project.task('mergeTestArtifacts', type: MergeTestArtifacts)
-        project.task('UploadTestArtifacts', type: UploadTestArtifacts)
-        project.task('totals', type: Totals)
+        project.task('mergeTestArtifacts', type: MergeTestArtifacts, group: EXTENSION)
+        project.task('uploadTestArtifacts', type: UploadTestArtifacts, group: EXTENSION)
+        project.task('totals', type: Totals, group: EXTENSION)
     }
 }

@@ -25,6 +25,55 @@ We have a task to convert data in *xml* or *csv* to json.
 
 Then we upload it to **firebase**.
 
+## How to Use?
+### Setup
+You need to include the plugin on your `build.gradle` classpath.
+```gradle
+buildscript {
+    repositories {
+        ...
+        jcenter() // we release here
+    }
+    dependencies {
+        ...
+        classpath 'com.brunodles:testartifacts:0.1.0'
+    }
+}
+```
+
+Then apply the plugin on your `build.gradle`.
+```gradle
+apply plugin: 'java'
+apply plugin: 'testartifacts'
+```
+
+Now just setup some of your project info.
+```gradle
+
+    archiver {
+        projectName = "Your project name here"
+        moduleName = "The name of your module" // Repeat the project name if no module
+        buildNumber = project.properties.get('buildNumber', 0) // Here you can read a System environment, depends on how you want to pass this parameter to gradle
+        firebaseUrl = "The subdomain of your firebase url"
+
+        // here you register the type of your reports and where to find then
+        files = [
+                // type and a list of file paths, we read reports from `buildDir`
+                'checkstyle': ['ktlint.xml', 'reports/checkstyle/main.xml'],
+                'jacoco'    : ['reports/jacoco/test/jacocoTestReport.xml'],
+                'jacocoCsv' : ['reports/jacoco/test/jacocoTestReport.csv'],
+                'lint'      : ['lint-results.xml'],
+                'test'      : ['test-results/test/TEST**.xml'] // we can use wildcards
+        ]
+    }
+```
+
+### Tasks
+After setup you can use the tasks.
+* mergeTestArtifacts - grab all reports and save into a jsonFile
+* uploadTestArtifacts - upload the report to our storage
+* totals - read reports file to extract totals (WIP)
+
 ## What is missing?
 We need to create a build data reader and a dashboard.
 

@@ -13,7 +13,7 @@ import static com.brunodles.testartifacts.StringUtils.*
 
 class MergeTestArtifacts extends DefaultTask {
 
-    Map<String, List<String>> files
+    Map<String, List<String>> files = new HashMap<>()
     String projectName
     String moduleName
     String buildNumber
@@ -67,7 +67,9 @@ class MergeTestArtifacts extends DefaultTask {
                 dateTime   : new SimpleDateFormat("yyyy.MM.dd HH:MM:ss").format(new Date())
         ])
         def json = new JsonBuilder(result).toString()
-        def file = new File(project.buildDir, "reports/uploadReports.json")
+        def reportDir = new File(project.buildDir, 'reports')
+        reportDir.mkdirs()
+        def file = new File(reportDir, "uploadReports.json")
         println "Saving at '$file.path'."
         file.write(json)
     }

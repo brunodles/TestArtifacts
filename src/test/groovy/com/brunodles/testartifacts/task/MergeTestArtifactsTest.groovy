@@ -49,5 +49,7 @@ class MergeTestArtifactsTest {
                 .build()
         Assert.assertTrue(result.output.contains("Saving at"))
         Assert.assertTrue(result.task(":mergeTestArtifacts").outcome == SUCCESS)
+        def reports = new File(testProjectDir.root, 'build/reports/uploadReports.json')
+        Assert.assertTrue(reports.exists())
     }
 }

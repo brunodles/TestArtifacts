@@ -2,7 +2,7 @@ package com.brunodles.testartifacts
 
 class TestArtifactsExtension {
     
-    public Map<String, List<String>> files
+    public Map<String, List<String>> files = new HashMap<>()
     public String projectName
     public String moduleName
     public String buildNumber

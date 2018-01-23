@@ -1,6 +1,6 @@
 package com.brunodles.testartifacts.task
 
-import com.brunodles.TestResourceReader
+import com.brunodles.testing.TestResourceReader
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Assert
 import org.junit.Before

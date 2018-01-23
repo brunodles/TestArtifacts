@@ -7,8 +7,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertNull
+import static org.junit.Assert.*
 
 @RunWith(JUnit4.class)
 class TestArtifactsExtensionTest {
@@ -24,7 +23,7 @@ class TestArtifactsExtensionTest {
     @Test
     void withoutSetup_extensionShouldUseDefaultValues() {
         def archiver = project.extensions.archiver as TestArtifactsExtension
-        assertNull archiver.files
+        assertTrue archiver.files.isEmpty()
         assertNull archiver.projectName
         assertNull archiver.moduleName
         assertNull archiver.buildNumber

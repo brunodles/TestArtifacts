@@ -1,5 +1,6 @@
 package com.brunodles.testartifacts.task
 
+import com.brunodles.TestResourceReader
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Assert
 import org.junit.Before
@@ -9,14 +10,19 @@ import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
+import java.util.regex.Pattern
+
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 @RunWith(JUnit4.class)
 class MergeTestArtifactsTest {
 
+    private static final
+    def EXPECTED_OUTPUT = Pattern.compile(TestResourceReader.readResource("MergeTestArtifacts/expectedOutput"))
+
     @Rule
     public TemporaryFolder testProjectDir = new TemporaryFolder()
-    File buildFile
+    private File buildFile
 
     @Before
     void setupProject() {
@@ -51,5 +57,9 @@ class MergeTestArtifactsTest {
         Assert.assertTrue(result.task(":mergeTestArtifacts").outcome == SUCCESS)
         def reports = new File(testProjectDir.root, 'build/reports/uploadReports.json')
         Assert.assertTrue(reports.exists())
+//        Assert.assertEquals("", reports.text)
+        def text = reports.text
+        Assert.assertTrue("Expected: ${EXPECTED_OUTPUT.toString()}\n" +
+                "     got: ${text}", EXPECTED_OUTPUT.matcher(text).matches())
     }
 }

@@ -1,5 +1,8 @@
+[![Build Status](https://travis-ci.org/brunodles/TestArtifacts.svg?branch=master)](https://travis-ci.org/brunodles/TestArtifacts)
+
 # Test Artifacts
 A gradle plugin to store test artifacts of open source projects.
+
 
 ## Why?
 I have a lot of open source projects and they have a lot of tests and other code quality tools that generate reports.

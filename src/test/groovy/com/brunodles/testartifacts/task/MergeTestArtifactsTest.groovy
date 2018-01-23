@@ -1,5 +1,6 @@
 package com.brunodles.testartifacts.task
 
+import com.brunodles.testing.Assertions
 import com.brunodles.testing.TestResourceReader
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Assert
@@ -57,9 +58,6 @@ class MergeTestArtifactsTest {
         Assert.assertTrue(result.task(":mergeTestArtifacts").outcome == SUCCESS)
         def reports = new File(testProjectDir.root, 'build/reports/uploadReports.json')
         Assert.assertTrue(reports.exists())
-//        Assert.assertEquals("", reports.text)
-        def text = reports.text
-        Assert.assertTrue("Expected: ${EXPECTED_OUTPUT.toString()}\n" +
-                "     got: ${text}", EXPECTED_OUTPUT.matcher(text).matches())
+        Assertions.assertMatches(EXPECTED_OUTPUT, reports.text)
     }
 }

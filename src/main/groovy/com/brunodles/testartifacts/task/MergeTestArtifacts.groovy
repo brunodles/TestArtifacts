@@ -62,7 +62,7 @@ class MergeTestArtifacts extends DefaultTask {
                         def values = new HashMap()
                         for (int i = 0; i < fieldNames.size(); i++)
                             values.put(fieldNames.get(i), fields.get(i))
-                        def key = "${fields.get(0)}_${fields.get(1)}"
+                        def key = "${fields.get(0)}_${fields.get(1)}_${fields.get(2)}"
                         //noinspection GroovyVariableNotAssigned
                         jsonRoot.put(fixKeyIfNeeded(key), values)
                     }

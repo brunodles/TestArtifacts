@@ -1,4 +1,4 @@
-package com.brunodles.testartifacts.task
+package com.brunodles.testartifacts.task.MergeTestArtifactsTest
 
 import com.brunodles.testing.Assertions
 import com.brunodles.testing.TestResourceReader
@@ -16,10 +16,10 @@ import java.util.regex.Pattern
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 @RunWith(JUnit4.class)
-class MergeTestArtifactsTest {
+class WhenReportFilesAreMissing {
 
     private static final
-    def EXPECTED_OUTPUT = Pattern.compile(TestResourceReader.readResource("MergeTestArtifacts/expectedOutput"))
+    def EXPECTED_OUTPUT = Pattern.compile(TestResourceReader.readResource("MergeTestArtifacts/empty_output"))
 
     @Rule
     public TemporaryFolder testProjectDir = new TemporaryFolder()
@@ -48,7 +48,7 @@ class MergeTestArtifactsTest {
     }
 
     @Test
-    void shouldCreateMergeReportFile() {
+    void shouldCreateMergeReportFile_withKeys() {
         def result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
                 .withArguments('mergeTestArtifacts')

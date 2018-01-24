@@ -49,6 +49,7 @@ class JacocoCsvTest {
                 .withProjectDir(testProjectDir.root)
                 .withArguments('mergeTestArtifacts')
                 .withPluginClasspath()
+                .withJacoco()
                 .build()
         def reports = new File(testProjectDir.root, 'build/reports/uploadReports.json')
         def expected = TestResourceReader.readResource("MergeTestArtifacts/jacococsv_output")

@@ -1,0 +1,3 @@
+moduleName=gradle-runner-module
+moduleVersion=1.0
+extensionClasses=com.brunodles.testing.GradleRunnerExtension

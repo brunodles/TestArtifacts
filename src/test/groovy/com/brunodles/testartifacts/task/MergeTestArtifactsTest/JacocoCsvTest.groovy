@@ -45,7 +45,7 @@ class JacocoCsvTest {
 
     @Test
     void shouldAddJacocoCsvData() {
-        def result = GradleRunner.create()
+        GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
                 .withArguments('mergeTestArtifacts')
                 .withPluginClasspath()

@@ -75,6 +75,8 @@ task uploadReports {
         file.write(json)
 
         sendToFirebase(json, projectName, buildNumber, moduleName)
+        if (buildNumber != 0)
+            sendToFirebase(json, projectName, 'last', moduleName)
     }
 }
 

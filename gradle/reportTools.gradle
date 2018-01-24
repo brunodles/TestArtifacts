@@ -67,22 +67,14 @@ task uploadReports {
                 moduleName : moduleName,
                 dateTime   : new SimpleDateFormat("yyyy.MM.dd HH:MM:ss").format(new Date())
         ])
+        def totals = totals(result)
+        result.put('totals', totals)
         def json = new JsonBuilder(result).toString()
         def file = new File(project.buildDir, "reports/uploadReports.json")
         println "Saving at '$file.path'."
         file.write(json)
 
-        def baseUrl = new URL("https://test-artifacts.firebaseio.com/${projectName}/${buildNumber}/${moduleName}.json")
-        def connection = baseUrl.openConnection()
-        connection.with {
-            doOutput = true
-            requestMethod = 'PUT'
-            outputStream.withWriter { writer ->
-                writer << json
-            }
-            content.text
-            println "Sent to firebase"
-        }
+        sendToFirebase(json, projectName, buildNumber, moduleName)
     }
 }
 
@@ -118,33 +110,72 @@ static String underscoreToCamelCase(String underscore) {
     return underscore.replaceAll(/_\w/) { it[1].toUpperCase() }
 }
 
-task totals {
-    def file = new File(project.buildDir, "reports/uploadReports.json")
-    doLast {
-        def slurper = new JsonSlurper()
-        def total = [
-                checkstyleErrors: 0,
-                test            : [
-                        errors  : 0, // All errors, only junit < 4
-                        tests   : 0, // All tests completed. error, skipped and failures are included
-                        failures: 0, // assertion erros
-                        skipped : 0  // ignored tests
-                ]
-        ]
-        Map json = slurper.parse(file) as Map
-        json.each { type, v ->
-            v.each { reportName, data ->
-                if (type == "checkstyle")
-                    total.checkstyleErrors += countCheckstyleErrors(data)
-                if (type == 'test') {
-                    total.test.errors += Integer.valueOf(data.errors) ?: 0
-                    total.test.failures += Integer.valueOf(data.failures)
-                    total.test.skipped += Integer.valueOf(data.skipped)
-                    total.test.tests += Integer.valueOf(data.tests)
+static Map totals(Map json) {
+    def total = [
+            checkstyleErrors: 0,
+            test            : [
+                    errors  : 0, // All errors, only junit < 4
+                    tests   : 0, // All tests completed. error, skipped and failures are included
+                    failures: 0, // assertion erros
+                    skipped : 0  // ignored tests
+            ],
+            coverage        : [
+                    covered: 0,
+                    missed : 0,
+                    total  : 0
+            ]
+    ]
+    json.each { type, v ->
+        v.each { reportName, data ->
+            if (type == "checkstyle")
+                total.checkstyleErrors += countCheckstyleErrors(data)
+            if (type == 'test') {
+                total.test.errors += Integer.valueOf(data.errors) ?: 0
+                total.test.failures += Integer.valueOf(data.failures)
+                total.test.skipped += Integer.valueOf(data.skipped)
+                total.test.tests += Integer.valueOf(data.tests)
+            }
+            if (type == 'jacoco') {
+                data.get('counterList').each { counterData ->
+                    if ("INSTRUCTION".equals(counterData.type)) {
+                        total.coverage.missed += Integer.valueOf(counterData.missed)
+                        total.coverage.covered += Integer.valueOf(counterData.covered)
+                    }
                 }
+
             }
         }
-        total.test.success = total.test.tests - (total.test.errors + total.test.failures + total.test.skipped)
-        println total
+    }
+    def instructions = (total.coverage.covered + total.coverage.missed)
+    if (instructions > 0)
+        total.coverage.total = Math.round((total.coverage.covered * 100) / instructions * 100) / 100
+    total.test.success = total.test.tests - (total.test.errors + total.test.failures + total.test.skipped)
+    return total
+}
+
+static int countCheckstyleErrors(Map fileData) {
+    if (!fileData.containsKey("fileList"))
+        return 0
+    int count = 0
+    fileData.get('fileList').each {
+        it.each { k, v ->
+            if ("errorList" == k)
+                count += v.size
+        }
+    }
+    return count
+}
+
+static void sendToFirebase(json, projectName, buildNumber, moduleName) {
+    def baseUrl = new URL("https://test-artifacts.firebaseio.com/${projectName}/${buildNumber}/${moduleName}.json")
+    def connection = baseUrl.openConnection()
+    connection.with {
+        doOutput = true
+        requestMethod = 'PUT'
+        outputStream.withWriter { writer ->
+            writer << json
+        }
+        content.text
+        println "Sent to firebase"
     }
 }

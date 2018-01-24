@@ -69,3 +69,7 @@ ext.publishing = [
 
 if (rootProject.file("gradle/scripter.gradle").exists())
     apply from: rootProject.file("gradle/scripter.gradle")
+
+project.apply from: "${project.rootDir}/gradle/reportTools.gradle"
+project.apply from: "${project.rootDir}/gradle/jacoco.gradle"
+project.apply from: "${project.rootDir}/gradle/checkstyle.gradle"

@@ -11,7 +11,8 @@ import org.gradle.api.tasks.TaskAction
 
 import java.text.SimpleDateFormat
 
-import static com.brunodles.testartifacts.StringUtils.*
+import static com.brunodles.testartifacts.helpers.StringUtils.*
+import static com.brunodles.testartifacts.helpers.XmlUtils.nested
 
 class MergeTestArtifacts extends DefaultTask {
 
@@ -48,7 +49,7 @@ class MergeTestArtifacts extends DefaultTask {
                 if (FileTypes.valueOf(type).decoder == 'xml') {
                     String text = file.text.replaceAll("\\<\\!?DOCTYPE.*?\\>", "")
                     def jsonRoot = nested(parser.parseText(text))
-                    return [(fixKeyIfNeeded("${file.name}")): jsonRoot]
+                    return [(removeEspecialCharacters("${file.name}")): jsonRoot]
                 } else {
                     boolean header = true
                     def fieldNames = []
@@ -64,12 +65,12 @@ class MergeTestArtifacts extends DefaultTask {
                             values.put(fieldNames.get(i), fields.get(i))
                         def key = "${fields.get(0)}_${fields.get(1)}_${fields.get(2)}"
                         //noinspection GroovyVariableNotAssigned
-                        jsonRoot.put(fixKeyIfNeeded(key), values)
+                        jsonRoot.put(removeEspecialCharacters(key), values)
                     }
-                    return [(fixKeyIfNeeded("${moduleName}_${file.name}")): jsonRoot]
+                    return [(removeEspecialCharacters("${moduleName}_${file.name}")): jsonRoot]
                 }
             }
-            [(fixKeyIfNeeded(type)): result]
+            [(removeEspecialCharacters(type)): result]
         }
         result.put('buildInfo', [
                 projectName: projectName,

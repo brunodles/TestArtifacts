@@ -1,0 +1,150 @@
+import groovy.json.JsonBuilder
+import groovy.json.JsonSlurper
+
+import java.text.SimpleDateFormat
+
+// This script is the initial idea for this plugin
+
+enum FileTypes {
+    checkstyle('xml'),
+    jacoco('xml'),
+    jacocoCsv('csv'),
+    lint('xml'),
+    test('xml')
+
+    final String decoder
+
+    FileTypes(String decoder) {
+        this.decoder = decoder
+    }
+}
+
+task uploadReports {
+    def files = [
+            'checkstyle': ['reports/checkstyle/**.xml'],
+            'jacoco'    : ['reports/jacoco/test/*.xml'],
+            'jacocoCsv' : ['reports/jacoco/test/*.csv'],
+            'test'      : ['test-results/test/TEST**.xml']
+    ]
+    def projectName = rootProject.name
+    def moduleName = project.name
+    def buildNumber = project.properties.get('buildNumber', 0)
+    doLast {
+        def parser = new XmlParser(false, false, false)
+        def result = files.collectEntries { type, path ->
+            def result = path.collect { fileTree(dir: project.buildDir, includes: [it]).asList() }
+                    .flatten()
+                    .findAll { it.exists() }
+                    .collectEntries { file ->
+                if (FileTypes.valueOf(type).decoder == 'xml') {
+                    def text = file.text.replaceAll("\\<\\!?DOCTYPE.*?\\>", "")
+                    def jsonRoot = nested(parser.parseText(text))
+                    return [(fixKeyIfNeeded("${file.name}")): jsonRoot]
+                } else {
+                    boolean header = true
+                    def fieldNames = []
+                    def jsonRoot = new HashMap()
+                    file.splitEachLine(",") { fields ->
+                        if (header) {
+                            fieldNames = fields.collect { underscoreToCamelCase(it.toLowerCase()) }
+                            header = false
+                            return
+                        }
+                        def values = new HashMap()
+                        for (int i = 0; i < fieldNames.size(); i++)
+                            values.put(fieldNames.get(i), fields.get(i))
+                        def key = "${fields.get(0)}_${fields.get(1)}_${fields.get(2)}"
+                        jsonRoot.put(fixKeyIfNeeded(key), values)
+                    }
+                    return [(fixKeyIfNeeded("${moduleName}_${file.name}")): jsonRoot]
+                }
+            }
+            [(fixKeyIfNeeded(type)): result]
+        }
+        result.put('buildInfo', [
+                projectName: projectName,
+                buildNumber: buildNumber,
+                moduleName : moduleName,
+                dateTime   : new SimpleDateFormat("yyyy.MM.dd HH:MM:ss").format(new Date())
+        ])
+        def json = new JsonBuilder(result).toString()
+        def file = new File(project.buildDir, "reports/uploadReports.json")
+        println "Saving at '$file.path'."
+        file.write(json)
+
+        def baseUrl = new URL("https://test-artifacts.firebaseio.com/${projectName}/${buildNumber}/${moduleName}.json")
+        def connection = baseUrl.openConnection()
+        connection.with {
+            doOutput = true
+            requestMethod = 'PUT'
+            outputStream.withWriter { writer ->
+                writer << json
+            }
+            content.text
+            println "Sent to firebase"
+        }
+    }
+}
+
+static def nested(Node node) {
+    def result = node.attributes()
+    def children = new LinkedHashMap<String, List<Map>>()
+    node.children().each { child ->
+        if (child instanceof Node) {
+            String name = fixKeyIfNeeded(child.name().toString())
+            String childKeyName = "${name}List"
+            List list = children.get(childKeyName)
+            if (list == null)
+                list = new LinkedList()
+            list.add(nested(child))
+            children.put(childKeyName, list)
+        } else {
+            result = child
+        }
+    }
+    if (!children.isEmpty())
+        result.putAll(children)
+    return result
+}
+
+static String fixKeyIfNeeded(String url) {
+    return url.replaceAll("[^\\d\\w]+", "")
+}
+
+static String underscoreToCamelCase(String underscore) {
+    if (!underscore || underscore.isAllWhitespace()) {
+        return ''
+    }
+    return underscore.replaceAll(/_\w/) { it[1].toUpperCase() }
+}
+
+task totals {
+    def file = new File(project.buildDir, "reports/uploadReports.json")
+    doLast {
+        def slurper = new JsonSlurper()
+        def total = [
+                checkstyleErrors: 0,
+                test            : [
+                        errors  : 0, // All errors, only junit < 4
+                        tests   : 0, // All tests completed. error, skipped and failures are included
+                        failures: 0, // assertion erros
+                        skipped : 0  // ignored tests
+                ]
+        ]
+        Map json = slurper.parse(file) as Map
+        json.each { type, v ->
+            v.each { reportName, data ->
+                if (type == "checkstyle")
+                    total.checkstyleErrors += countCheckstyleErrors(data)
+                if (type == 'test') {
+                    total.test.errors += Integer.valueOf(data.errors) ?: 0
+                    total.test.failures += Integer.valueOf(data.failures)
+                    total.test.skipped += Integer.valueOf(data.skipped)
+                    total.test.tests += Integer.valueOf(data.tests)
+                }
+            }
+        }
+        total.test.success = total.test.tests - (total.test.errors + total.test.failures + total.test.skipped)
+        println total
+    }
+}

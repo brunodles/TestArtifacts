@@ -1,0 +1,20 @@
+apply plugin: 'checkstyle'
+
+checkstyle {
+    toolVersion "8.7"
+    sourceSets = [project.sourceSets.main, project.sourceSets.test]
+}
+
+checkstyleMain {
+    source 'src/main/'
+    exclude '**/build/**'
+    configFile rootProject.file('gradle/checkstyle.xml')
+}
+
+checkstyleTest {
+    source 'src/test/'
+    exclude '**/build/**'
+    configFile rootProject.file('gradle/checkstyle.xml')
+}
+
+task checkstyleAll(dependsOn: ['checkstyleMain', 'checkstyleTest'])

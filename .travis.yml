@@ -24,7 +24,9 @@ cache:
 before_install:
   - chmod +x gradlew
 
-script: ./gradlew test --info
+script:
+  - ./gradlew clean checkstyleAll test jacocoMergeTest --continue --info
+  - ./gradlew uploadReports
 
 deploy:
   skip_cleanup: true

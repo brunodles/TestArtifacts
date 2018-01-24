@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/brunodles/TestArtifacts.svg?branch=master)](https://travis-ci.org/brunodles/TestArtifacts)
+[![coverage](https://img.shields.io/badge/dynamic/json.svg?label=coverage&colorB=0f80c0&prefix=&suffix=%&query=$.coverage.total&uri=https://test-artifacts.firebaseio.com/testartifacts/last/testartifacts/totals.json)](https://test-artifacts.firebaseio.com/testartifacts/last/testartifacts/totals.json)
 
 # Test Artifacts
 A gradle plugin to store test artifacts of open source projects.

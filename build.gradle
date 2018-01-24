@@ -7,12 +7,14 @@ buildscript {
     dependencies {
         classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath "gradle.plugin.pl.droidsonroids.gradle.jacoco:jacoco-testkit-plugin:1.0.3"
     }
 }
 
 apply plugin: 'groovy'
 apply plugin: "net.ltgt.apt"
 apply plugin: 'java-gradle-plugin'
+apply plugin: "pl.droidsonroids.jacoco.testkit"
 
 compileGroovy {
     groovyOptions.javaAnnotationProcessing = true

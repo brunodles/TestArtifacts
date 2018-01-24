@@ -3,10 +3,12 @@ package com.brunodles.testartifacts.task
 import com.brunodles.testartifacts.TestArtifactsExtension
 import com.brunodles.testartifacts.TestArtifactsPlugin
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
 
 class UploadTestArtifacts extends DefaultTask {
 
+    @InputFile
     File file = new File(project.buildDir, "reports/uploadReports.json")
 
     @TaskAction

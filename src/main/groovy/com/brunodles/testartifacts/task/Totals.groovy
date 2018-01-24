@@ -2,10 +2,12 @@ package com.brunodles.testartifacts.task
 
 import groovy.json.JsonSlurper
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
 
 class Totals extends DefaultTask {
 
+    @InputFile
     File file = new File(project.buildDir, "reports/uploadReports.json")
 
     @TaskAction

@@ -13,7 +13,10 @@ final class Assertions {
     }
 
     static void assertMatches(Pattern pattern, String result) {
-        Assert.assertTrue("Expected: ${pattern.toString()}\n" +
-                "     got: ${result}", pattern.matcher(result).matches())
+        def expected = pattern.toString().replaceAll('\\\\([\\{\\}\\[\\]\\(\\)\\-\\:\\.\\/\\\\])') { it[1] }
+        Assert.assertTrue("Failed to match regex\n" +
+                "Expected: ${expected}\n" +
+                "     got: ${result}",
+                pattern.matcher(result).matches())
     }
 }

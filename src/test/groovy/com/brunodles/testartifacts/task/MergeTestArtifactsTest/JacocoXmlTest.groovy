@@ -14,7 +14,7 @@ import org.junit.runners.JUnit4
 class JacocoXmlTest {
 
     private static final
-    def JACOCO_FILE = TestResourceReader.readResource("MergeTestArtifacts/jacocoxml")
+    def JACOCO_FILE = TestResourceReader.readResource("MergeTestArtifacts/jacoco.xml")
 
     @Rule
     public TemporaryFolder testProjectDir = new TemporaryFolder()

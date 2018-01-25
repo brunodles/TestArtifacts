@@ -15,7 +15,7 @@ import org.junit.runners.JUnit4
 class JacocoCsvTest {
 
     private static final
-    def JACOCO_FILE = TestResourceReader.readResource("MergeTestArtifacts/jacococsv")
+    def JACOCO_FILE = TestResourceReader.readResource("MergeTestArtifacts/jacoco.csv")
 
     @Rule
     public TemporaryFolder testProjectDir = new TemporaryFolder()

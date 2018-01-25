@@ -25,6 +25,5 @@ final class CsvParser implements FileParser {
         }
 
         return jsonRoot
-//        return [(removeEspecialCharacters("${moduleName}_${file.name}")): jsonRoot]
     }
 }

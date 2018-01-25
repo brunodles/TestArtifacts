@@ -8,6 +8,7 @@ buildscript {
         classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath "gradle.plugin.pl.droidsonroids.gradle.jacoco:jacoco-testkit-plugin:1.0.3"
+        classpath 'org.owasp:dependency-check-gradle:3.1.0'
     }
 }
 
@@ -75,3 +76,4 @@ if (rootProject.file("gradle/scripter.gradle").exists())
 project.apply from: "${project.rootDir}/gradle/reportTools.gradle"
 project.apply from: "${project.rootDir}/gradle/jacoco.gradle"
 project.apply from: "${project.rootDir}/gradle/checkstyle.gradle"
+project.apply from: "${project.rootDir}/gradle/dependencyCheck.gradle"

@@ -1,7 +1,7 @@
 package com.brunodles.testartifacts.task.MergeTestArtifactsTest
 
 import com.brunodles.testing.Assertions
-import com.brunodles.testing.TestResourceReader
+import com.brunodles.testing.Resources
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Assert
 import org.junit.Before
@@ -19,7 +19,7 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 class WhenReportFilesAreMissing {
 
     private static final
-    def EXPECTED_OUTPUT = Pattern.compile(TestResourceReader.readResource("MergeTestArtifacts/empty_output"))
+    def EXPECTED_OUTPUT = Pattern.compile(Resources.readResource("MergeTestArtifacts/empty_output"))
 
     @Rule
     public TemporaryFolder testProjectDir = new TemporaryFolder()

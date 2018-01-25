@@ -1,7 +1,7 @@
 package com.brunodles.testartifacts.task.MergeTestArtifactsTest
 
 import com.brunodles.testing.Assertions
-import com.brunodles.testing.TestResourceReader
+import com.brunodles.testing.Resources
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Before
 import org.junit.Rule
@@ -14,7 +14,7 @@ import org.junit.runners.JUnit4
 class JacocoXmlTest {
 
     private static final
-    def JACOCO_FILE = TestResourceReader.readResource("MergeTestArtifacts/jacoco.xml")
+    def JACOCO_FILE = Resources.readResource("MergeTestArtifacts/jacoco.xml")
 
     @Rule
     public TemporaryFolder testProjectDir = new TemporaryFolder()
@@ -52,7 +52,7 @@ class JacocoXmlTest {
                 .forwardOutput()
                 .build()
         def reports = new File(testProjectDir.root, 'build/reports/uploadReports.json')
-        def expected = TestResourceReader.readResource("MergeTestArtifacts/jacocoxml_output")
+        def expected = Resources.readResource("MergeTestArtifacts/jacocoxml_output")
         Assertions.assertMatches(expected, reports.text)
     }
 }

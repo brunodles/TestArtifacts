@@ -1,6 +1,6 @@
 package com.brunodles.testartifacts.reportparser
 
-import com.brunodles.testing.TestResourceReader
+import com.brunodles.testing.Resources
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -18,13 +18,13 @@ class XmlParserTest {
 
     @Test
     void whenDoctype_shouldBeIgnored() {
-        def result = xmlParser.parse(TestResourceReader.file('ReportParser/doctype_samelinexml'))
+        def result = xmlParser.parse(Resources.file('ReportParser/doctype_samelinexml'))
         assertEquals([name: "testartifacts"], result)
     }
 
     @Test
     void whenDoctypeContainsLineBreak_shouldBeIgnored() {
-        def result = xmlParser.parse(TestResourceReader.file('ReportParser/doctype_multiline.xml'))
+        def result = xmlParser.parse(Resources.file('ReportParser/doctype_multiline.xml'))
         assertEquals([name: "testartifacts"], result)
     }
 

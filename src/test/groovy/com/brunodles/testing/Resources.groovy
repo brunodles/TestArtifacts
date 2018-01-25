@@ -1,7 +1,7 @@
 package com.brunodles.testing
 
-final class TestResourceReader {
-    private TestResourceReader() {
+final class Resources {
+    private Resources() {
     }
 
     static String readResource(String resource) {

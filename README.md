@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/brunodles/TestArtifacts.svg?branch=master)](https://travis-ci.org/brunodles/TestArtifacts)
-[![coverage](https://img.shields.io/badge/dynamic/json.svg?label=coverage&colorB=0f80c0&prefix=&suffix=%&query=$.coverage.total&uri=https://test-artifacts.firebaseio.com/testartifacts/last/testartifacts/totals.json)](https://test-artifacts.firebaseio.com/testartifacts/last.json)
-[![coverage](https://img.shields.io/badge/dynamic/json.svg?label=Checkstyle errors&colorB=C2185B&prefix=&suffix=&query=$.checkstyleErrors&uri=https://test-artifacts.firebaseio.com/testartifacts/last/testartifacts/totals.json)](https://test-artifacts.firebaseio.com/testartifacts/last.json)
-[![coverage](https://img.shields.io/badge/dynamic/json.svg?label=Tests&colorB=7B1FA2&prefix=&suffix=&query=$.test.tests&uri=https://test-artifacts.firebaseio.com/testartifacts/last/testartifacts/totals.json)](https://test-artifacts.firebaseio.com/testartifacts/last.json)
-[![coverage](https://img.shields.io/badge/dynamic/json.svg?label=Tests success rate&colorB=E53935&prefix=&suffix=%&query=$.test.successRate&uri=https://test-artifacts.firebaseio.com/testartifacts/last/testartifacts/totals.json)](https://test-artifacts.firebaseio.com/testartifacts/last.json)
+[![Coverage](https://img.shields.io/badge/dynamic/json.svg?label=coverage&colorB=0f80c0&prefix=&suffix=%&query=$.coverage.total&uri=https://test-artifacts.firebaseio.com/testartifacts/last/testartifacts/totals.json)](https://test-artifacts.firebaseio.com/testartifacts/last.json)
+[![Checkstyle](https://img.shields.io/badge/dynamic/json.svg?label=Checkstyle_errors&colorB=C2185B&prefix=&suffix=&query=$.checkstyleErrors&uri=https://test-artifacts.firebaseio.com/testartifacts/last/testartifacts/totals.json)](https://test-artifacts.firebaseio.com/testartifacts/last.json)
+[![Test Count](https://img.shields.io/badge/dynamic/json.svg?label=Tests&colorB=7B1FA2&prefix=&suffix=&query=$.test.tests&uri=https://test-artifacts.firebaseio.com/testartifacts/last/testartifacts/totals.json)](https://test-artifacts.firebaseio.com/testartifacts/last.json)
+[![Test success rate](https://img.shields.io/badge/dynamic/json.svg?label=Tests_success_rate&colorB=E53935&prefix=&suffix=%&query=$.test.successRate&uri=https://test-artifacts.firebaseio.com/testartifacts/last/testartifacts/totals.json)](https://test-artifacts.firebaseio.com/testartifacts/last.json)
 
 # Test Artifacts
 A gradle plugin to store test artifacts of open source projects.

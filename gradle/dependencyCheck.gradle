@@ -1,0 +1,11 @@
+// This is how to add this dependency on your `buildscript`
+//buildscript.dependencies{
+//    classpath 'org.owasp:dependency-check-gradle:3.1.0'
+//}
+
+apply plugin: 'org.owasp.dependencycheck'
+
+dependencyCheck {
+    format = 'ALL'
+}
+check.dependsOn dependencyCheckAnalyze

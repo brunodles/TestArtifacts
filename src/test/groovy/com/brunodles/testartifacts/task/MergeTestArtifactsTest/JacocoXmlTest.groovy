@@ -43,12 +43,13 @@ class JacocoXmlTest {
     }
 
     @Test
-    void shouldAddJacocoCsvData() {
+    void shouldAddJacocoXmlData() {
         GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
                 .withArguments('mergeTestArtifacts')
                 .withPluginClasspath()
                 .withJacoco()
+                .forwardOutput()
                 .build()
         def reports = new File(testProjectDir.root, 'build/reports/uploadReports.json')
         def expected = TestResourceReader.readResource("MergeTestArtifacts/jacocoxml_output")

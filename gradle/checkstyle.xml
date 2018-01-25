@@ -15,7 +15,9 @@
     </module>
     
     <module name="SuppressWarningsFilter" />
-    <module name="NewlineAtEndOfFile" />
+    <module name="NewlineAtEndOfFile">
+        <property name="fileExtensions" value="java, xml, gradle, groovy"/>
+    </module>
     <module name="FileLength" />
     <module name="FileTabCharacter" />
 

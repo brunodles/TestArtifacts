@@ -7,7 +7,7 @@ class XmlParser implements FileParser {
 
     @Override
     def parse(File file) {
-        String text = file.text.replaceAll("\\<\\!?DOCTYPE.*?\\>", "")
+        String text = file.text.replaceAll("(?smi)<!DOCTYPE.*?>", "")
         return nested(parser.parseText(text))
     }
 }

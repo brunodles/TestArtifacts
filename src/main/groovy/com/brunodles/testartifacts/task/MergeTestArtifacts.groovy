@@ -1,6 +1,6 @@
 package com.brunodles.testartifacts.task
 
-import com.brunodles.testartifacts.FileTypes
+import com.brunodles.testartifacts.reportparser.ReportType
 import com.brunodles.testartifacts.TestArtifactsExtension
 import com.brunodles.testartifacts.TestArtifactsPlugin
 import groovy.json.JsonBuilder
@@ -12,7 +12,6 @@ import org.gradle.api.tasks.TaskAction
 import java.text.SimpleDateFormat
 
 import static com.brunodles.testartifacts.helpers.StringUtils.*
-import static com.brunodles.testartifacts.helpers.XmlUtils.nested
 
 class MergeTestArtifacts extends DefaultTask {
 
@@ -35,40 +34,20 @@ class MergeTestArtifacts extends DefaultTask {
     @TaskAction
     def mergeReports() {
         TestArtifactsExtension extension = project.getExtensions().findByName(TestArtifactsPlugin.EXTENSION) as TestArtifactsExtension
-        def files = extension.files ?: new HashMap()
+        def files = extension.files ?: new HashMap<String, List<String>>()
         def projectName = extension.projectName
         def moduleName = extension.moduleName
         def buildNumber = extension.buildNumber
 
-        def parser = new XmlParser(false, false, false)
         def result = files.collectEntries { type, path ->
             def result = path.collect { project.fileTree(dir: project.buildDir, includes: [it]).asList() }
                     .flatten()
                     .findAll { it.exists() }
                     .collectEntries { file ->
-                if (FileTypes.valueOf(type).decoder == 'xml') {
-                    String text = file.text.replaceAll("\\<\\!?DOCTYPE.*?\\>", "")
-                    def jsonRoot = nested(parser.parseText(text))
-                    return [(removeEspecialCharacters("${file.name}")): jsonRoot]
-                } else {
-                    boolean header = true
-                    def fieldNames = []
-                    def jsonRoot = new HashMap()
-                    file.splitEachLine(",") { fields ->
-                        if (header) {
-                            fieldNames = fields.collect { underscoreToCamelCase(it.toLowerCase()) }
-                            header = false
-                            return
-                        }
-                        def values = new HashMap()
-                        for (int i = 0; i < fieldNames.size(); i++)
-                            values.put(fieldNames.get(i), fields.get(i))
-                        def key = "${fields.get(0)}_${fields.get(1)}_${fields.get(2)}"
-                        //noinspection GroovyVariableNotAssigned
-                        jsonRoot.put(removeEspecialCharacters(key), values)
-                    }
-                    return [(removeEspecialCharacters("${moduleName}_${file.name}")): jsonRoot]
-                }
+                def reportType = ReportType.valueOf(type)
+                if (file instanceof File)
+                    return [(removeEspecialCharacters("${file.name}")): reportType.parse(file as File)]
+                return null
             }
             [(removeEspecialCharacters(type)): result]
         }

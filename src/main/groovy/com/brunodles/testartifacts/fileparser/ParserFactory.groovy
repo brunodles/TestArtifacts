@@ -1,4 +1,4 @@
-package com.brunodles.testartifacts.reportparser
+package com.brunodles.testartifacts.fileparser
 
 final class ParserFactory {
 

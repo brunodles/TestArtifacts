@@ -1,5 +1,6 @@
 package com.brunodles.testartifacts.reportparser
 
+import com.brunodles.testartifacts.fileparser.XmlParser
 import com.brunodles.testing.Resources
 import org.junit.Rule
 import org.junit.Test

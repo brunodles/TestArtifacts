@@ -1,4 +1,4 @@
-package com.brunodles.testartifacts.reportparser
+package com.brunodles.testartifacts.fileparser
 
 import static com.brunodles.testartifacts.helpers.StringUtils.removeEspecialCharacters
 

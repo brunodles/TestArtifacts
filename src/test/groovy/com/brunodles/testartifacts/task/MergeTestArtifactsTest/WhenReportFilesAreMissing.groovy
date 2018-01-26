@@ -54,6 +54,7 @@ class WhenReportFilesAreMissing {
                 .withArguments('mergeTestArtifacts')
                 .withPluginClasspath()
                 .withJacoco()
+        .withDebug(true)
                 .build()
         Assert.assertTrue(result.output.contains("Saving at"))
         Assert.assertTrue(result.task(":mergeTestArtifacts").outcome == SUCCESS)

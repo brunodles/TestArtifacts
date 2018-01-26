@@ -123,9 +123,9 @@ static Map totals(Map json) {
                     successRate: 0
             ],
             coverage        : [
-                    covered: 0,
-                    missed : 0,
-                    total  : 0
+                    covered    : 0,
+                    missed     : 0,
+                    coveredRate: 0
             ]
     ]
     json.each { type, v ->
@@ -151,7 +151,7 @@ static Map totals(Map json) {
     }
     def instructions = (total.coverage.covered + total.coverage.missed)
     if (instructions > 0)
-        total.coverage.total = Math.round(total.coverage.covered * 10000 / instructions) / 100
+        total.coverage.coveredRate = Math.round(total.coverage.covered * 10000 / instructions) / 100
     total.test.success = total.test.tests - (total.test.errors + total.test.failures + total.test.skipped)
     total.test.successRate = Math.round(total.test.success * 10000 / total.test.tests) / 100
     return total

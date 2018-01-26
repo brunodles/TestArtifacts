@@ -1,6 +1,7 @@
 package com.brunodles.testartifacts.reportparser
 
-import static ParserFactory.*
+import static com.brunodles.testartifacts.reportparser.ParserFactory.getCSV
+import static com.brunodles.testartifacts.reportparser.ParserFactory.getXML
 
 enum ReportType implements FileParser {
     checkstyle(XML),

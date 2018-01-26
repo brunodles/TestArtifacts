@@ -6,17 +6,17 @@ jacoco {
 
 jacocoTestReport {
     reports {
-        xml.enabled true
-        csv.enabled true
-        html.enabled true
+        xml.enabled = true
+        csv.enabled = true
+        html.enabled = true
     }
     additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
     sourceDirectories = files(sourceSets.main.allSource.srcDirs)
-    classDirectories =  files(sourceSets.main.output)
+    classDirectories = files(sourceSets.main.output)
 }
 
 test {
-    ignoreFailures = properties.get("ignoreFailures", false)
+    setIgnoreFailures(Boolean.valueOf(properties.get("ignoreFailures", 'false').toString()))
     reports {
         junitXml.enabled = true
         html.enabled = true

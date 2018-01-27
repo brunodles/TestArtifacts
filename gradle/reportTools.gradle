@@ -21,7 +21,7 @@ enum FileTypes {
 
 task uploadReports {
     def files = [
-            'checkstyle': ['reports/checkstyle/**.xml'],
+            'checkstyle': ['reports/checkstyle/**.xml', "ktlint.xml"],
             'jacoco'    : ['reports/jacoco/test/*.xml'],
             'jacocoCsv' : ['reports/jacoco/test/*.csv'],
             'test'      : ['test-results/test/TEST**.xml']

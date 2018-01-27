@@ -4,96 +4,95 @@ import org.junit.Test
 import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
 
-import static com.brunodles.testartifacts.helpers.StringUtils.removeEspecialCharacters
-import static com.brunodles.testartifacts.helpers.StringUtils.underscoreToCamelCase
-import static org.junit.Assert.assertEquals
+import  com.brunodles.testartifacts.helpers.StringUtils.removeEspecialCharacters
+import  com.brunodles.testartifacts.helpers.StringUtils.underscoreToCamelCase
+import  org.junit.Assert.assertEquals
 
-@RunWith(Enclosed.class)
+@RunWith(Enclosed::class)
 class StringUtilsTest {
 
-    static class WhenRemoveEspecialCharacters {
+    class WhenRemoveEspecialCharacters {
         @Test
-        void withSimpleString_shouldReturnTheSameString() {
+        fun withSimpleString_shouldReturnTheSameString() {
             assertEquals("123abc", removeEspecialCharacters("123abc"))
         }
 
         @Test
-        void withSpellingAccents_shouldReturnTextWithoutAccents() {
+        fun withSpellingAccents_shouldReturnTextWithoutAccents() {
             assertEquals("aaaaaeeeeeiiiiiooooouuuuuyyyyynnncc", removeEspecialCharacters("áàâãäéèêẽëíìîĩïóòôõöúùûũüýỳŷỹÿñńǹçḉ"))
         }
 
         @Test
-        void withUrl_shouldRemoveSlashesAndDots() {
+        fun withUrl_shouldRemoveSlashesAndDots() {
             assertEquals("httpsgithubcombrunodlesTestArtifacts", removeEspecialCharacters("https://github.com/brunodles/TestArtifacts"))
         }
 
         @Test
-        void withLinuxPath_shouldRemoveSlashes() {
+        fun withLinuxPath_shouldRemoveSlashes() {
             assertEquals("homeworkspaceanimewatchermagicfilejson", removeEspecialCharacters("~/home/workspace/anime-watcher/magicfile.json"))
         }
 
         @Test
-        void withWindowsPath_shouldRemoveSlashes() {
+        fun withWindowsPath_shouldRemoveSlashes() {
             assertEquals("cworkspaceanimewatchermagicfile2json", removeEspecialCharacters("c:/workspace/anime-watcher/magicfile2.json"))
         }
 
         @Test
-        void withPunctuation_shouldRemovePunctuation() {
+        fun withPunctuation_shouldRemovePunctuation() {
             assertEquals("", removeEspecialCharacters("\"',.!@#\$%&*()[]{},.;<>:\\\\|/?´`~^¹²³£¢¬§ªº/?€®ŧ←↓→øþæßðđŋħł»©“”µ"))
         }
 
         @Test
-        void withMixedCase_shouldNotChangeIt() {
+        fun withMixedCase_shouldNotChangeIt() {
             assertEquals("aAbcdEe", removeEspecialCharacters("\\à,À.b;cdÊẽ~"))
         }
 
-        @Test(expected = NullPointerException)
-        void withNullString_shouldThrowNullPointerException() {
+        @Test(expected = NullPointerException::class)
+        fun withNullString_shouldThrowNullPointerException() {
             removeEspecialCharacters(null)
         }
 
         @Test
-        void withEmptyString_shouldReturnTheSameString() {
+        fun withEmptyString_shouldReturnTheSameString() {
             assertEquals("", removeEspecialCharacters(""))
         }
 
         @Test
-        void withWhiteSpaces_shouldRemoveThen() {
+        fun withWhiteSpaces_shouldRemoveThen() {
             assertEquals("wow", removeEspecialCharacters("\tw\no w  \t \t\n\t "))
         }
     }
 
-    static class WhenUnderscoreToCamelCase {
+    class WhenUnderscoreToCamelCase {
 
         @Test
-        void withoutUnderscore_shouldReturnSameString() {
+        fun withoutUnderscore_shouldReturnSameString() {
             assertEquals("Look.this-string", underscoreToCamelCase("Look.this-string"))
         }
 
         @Test
-        void withUnderscore_shouldParseToCamelCase() {
+        fun withUnderscore_shouldParseToCamelCase() {
             assertEquals("manLookThis", underscoreToCamelCase("man_look_this"))
         }
 
         @Test
-        void withSpaces_shouldRemoveIt() {
+        fun withSpaces_shouldRemoveIt() {
             assertEquals("iHaveSpaces", underscoreToCamelCase("i have spaces"))
         }
 
         @Test
-        void withEmptyString_shouldReturnEmptyString() {
+        fun withEmptyString_shouldReturnEmptyString() {
             assertEquals("", underscoreToCamelCase(""))
         }
 
         @Test
-        void withWhiteSpaces_shouldReturnEmptyString() {
+        fun withWhiteSpaces_shouldReturnEmptyString() {
             assertEquals("", underscoreToCamelCase(" \t \n"))
         }
 
-        @Test(expected = NullPointerException)
-        void withNullString_shouldThrowNullPointerException() {
+        @Test(expected = NullPointerException::class)
+        fun withNullString_shouldThrowNullPointerException() {
             removeEspecialCharacters(null)
         }
     }
-
 }

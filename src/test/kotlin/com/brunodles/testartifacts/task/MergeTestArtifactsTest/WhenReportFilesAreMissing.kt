@@ -1,7 +1,9 @@
 package com.brunodles.testartifacts.task.MergeTestArtifactsTest
 
+
 import com.brunodles.testing.Assertions
 import com.brunodles.testing.Resources
+import com.brunodles.testing.withJacoco
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Assert
 import org.junit.Before
@@ -13,22 +15,23 @@ import org.junit.runners.JUnit4
 
 import java.util.regex.Pattern
 
-import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import java.io.File
 
-@RunWith(JUnit4.class)
+@RunWith(JUnit4::class)
 class WhenReportFilesAreMissing {
 
-    private static final
-    def EXPECTED_OUTPUT = Pattern.compile(Resources.readResource("MergeTestArtifacts/empty_output"))
+    private val EXPECTED_OUTPUT = Pattern.compile(Resources.readResource("MergeTestArtifacts/empty_output"))
 
     @Rule
-    public TemporaryFolder testProjectDir = new TemporaryFolder()
-    private File buildFile
+    @JvmField
+    val testProjectDir = TemporaryFolder()
+    private lateinit var buildFile: File
 
     @Before
-    void setupProject() {
-        buildFile = testProjectDir.newFile('build.gradle')
-        buildFile << """
+    fun setupProject() {
+        buildFile = testProjectDir.newFile("build.gradle")
+        buildFile.writeText("""
             plugins {
                 id 'testartifacts' version '0.1.0'
             }
@@ -44,22 +47,22 @@ class WhenReportFilesAreMissing {
                         'test'      : ['test-results/test/TEST**.xml']
                 ]
             }
-        """
+        """)
     }
 
     @Test
-    void shouldCreateMergeReportFile_withKeys() {
-        def result = GradleRunner.create()
+    fun shouldCreateMergeReportFile_withKeys() {
+        val result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
-                .withArguments('mergeTestArtifacts')
+                .withArguments("mergeTestArtifacts")
                 .withPluginClasspath()
                 .withJacoco()
-        .withDebug(true)
+                .withDebug(true)
                 .build()
         Assert.assertTrue(result.output.contains("Saving at"))
-        Assert.assertTrue(result.task(":mergeTestArtifacts").outcome == SUCCESS)
-        def reports = new File(testProjectDir.root, 'build/reports/uploadReports.json')
+        Assert.assertTrue(result.task(":mergeTestArtifacts")!!.outcome == SUCCESS)
+        val reports = File(testProjectDir.root, "build/reports/uploadReports.json")
         Assert.assertTrue(reports.exists())
-        Assertions.assertMatches(EXPECTED_OUTPUT, reports.text)
+        Assertions.assertMatches(EXPECTED_OUTPUT, reports.readText())
     }
 }

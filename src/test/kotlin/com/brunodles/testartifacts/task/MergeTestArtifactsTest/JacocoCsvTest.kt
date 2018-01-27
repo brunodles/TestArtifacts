@@ -2,6 +2,7 @@ package com.brunodles.testartifacts.task.MergeTestArtifactsTest
 
 import com.brunodles.testing.Assertions
 import com.brunodles.testing.Resources
+import com.brunodles.testing.withJacoco
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Before
 import org.junit.Rule
@@ -9,21 +10,23 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import java.io.File
 
-@RunWith(JUnit4.class)
+@RunWith(JUnit4::class)
 class JacocoCsvTest {
 
-    private static final
-    def JACOCO_FILE = Resources.readResource("MergeTestArtifacts/jacoco.csv")
+    private
+    val JACOCO_FILE = Resources.readResource("MergeTestArtifacts/jacoco.csv")
 
     @Rule
-    public TemporaryFolder testProjectDir = new TemporaryFolder()
-    private File buildFile
+    @JvmField
+    val testProjectDir = TemporaryFolder()
+    private lateinit var buildFile: File
 
     @Before
-    void setupProject() {
-        buildFile = testProjectDir.newFile('build.gradle')
-        buildFile << """
+    fun setupProject() {
+        buildFile = testProjectDir.newFile("build.gradle")
+        buildFile.writeText("""
             plugins {
                 id 'testartifacts' version '0.1.0'
             }
@@ -35,23 +38,23 @@ class JacocoCsvTest {
                         'jacocoCsv' : ['jacocoTestReport.csv']
                 ]
             }
-        """
-        def buildFolder = testProjectDir.newFolder("build")
-        def file = new File(buildFolder, "jacocoTestReport.csv")
+        """)
+        val buildFolder = testProjectDir.newFolder("build")
+        val file = File(buildFolder, "jacocoTestReport.csv")
         file.createNewFile()
-        file << JACOCO_FILE
+        file.writeText(JACOCO_FILE)
     }
 
     @Test
-    void shouldAddJacocoCsvData() {
+    fun shouldAddJacocoCsvData() {
         GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
-                .withArguments('mergeTestArtifacts')
+                .withArguments("mergeTestArtifacts")
                 .withPluginClasspath()
                 .withJacoco()
                 .build()
-        def reports = new File(testProjectDir.root, 'build/reports/uploadReports.json')
-        def expected = Resources.readResource("MergeTestArtifacts/jacococsv_output")
-        Assertions.assertMatches(expected, reports.text)
+        val reports = File(testProjectDir.root, "build/reports/uploadReports.json")
+        val expected = Resources.readResource("MergeTestArtifacts/jacococsv_output")
+        Assertions.assertMatches(expected, reports.readText())
     }
 }

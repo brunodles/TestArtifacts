@@ -28,7 +28,7 @@ class TestArtifactsPluginTest {
         assertTrue(archiver.files.isEmpty())
         assertNull(archiver.projectName)
         assertNull(archiver.moduleName)
-        assertNull(archiver.buildNumber)
+        assertEquals("debug", archiver.buildNumber)
         assertEquals("test-artifacts", archiver.firebaseUrl)
     }
 

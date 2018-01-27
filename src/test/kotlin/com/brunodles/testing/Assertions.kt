@@ -11,9 +11,11 @@ object Assertions {
     }
 
     fun assertMatches(pattern: Pattern, result: String) {
-        val expected = pattern.toString().replace("\\\\([\\{\\}\\[\\]\\(\\)\\-\\:\\.\\/\\\\])", "\\$1")
+        val printableExpected = pattern.toString().replace("\\\\([\\{\\}\\[\\]\\(\\)\\-\\:\\.\\/\\\\\\$])".toRegex(), "$1")
+//        val tempResult = result.replace("\"dateTime\":\".*?\"".toRegex(), "\"dateTime\":\"\\.\\*\\?\"")
+//        Assert.assertEquals(printableExpected, tempResult)
         Assert.assertTrue("Failed to match regex\n" +
-                "Expected: $expected\n" +
+                "Expected: $printableExpected\n" +
                 "     got: $result",
                 pattern.matcher(result).matches())
     }

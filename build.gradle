@@ -20,6 +20,7 @@ apply plugin: 'groovy'
 apply plugin: "net.ltgt.apt"
 apply plugin: 'java-gradle-plugin'
 apply plugin: "pl.droidsonroids.jacoco.testkit"
+apply plugin: 'kotlin-kapt'
 
 compileGroovy {
     groovyOptions.javaAnnotationProcessing = true

@@ -4,14 +4,16 @@ interface ReportTotalizer {
 
     /**
      * When grab data from file
+     *
      * @param filename the key name for original file report
-     * @param data report content
+     * @param data     report content
      */
-    void onData(String filename, Map<String, Object> data)
+    fun onData(filename: String, data: Map<String, Any>)
 
     /**
      * Called to collect total or resume from report
+     *
      * @return
      */
-    Map<String, Object> result()
+    fun result(): Map<String, Any>
 }

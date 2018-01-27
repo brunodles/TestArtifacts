@@ -21,8 +21,6 @@ import java.io.File
 @RunWith(JUnit4::class)
 class WhenReportFilesAreMissing {
 
-    private val EXPECTED_OUTPUT = Pattern.compile(Resources.readResource("MergeTestArtifacts/empty_output"))
-
     @Rule
     @JvmField
     val testProjectDir = TemporaryFolder()
@@ -54,7 +52,7 @@ class WhenReportFilesAreMissing {
     fun shouldCreateMergeReportFile_withKeys() {
         val result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
-                .withArguments("mergeTestArtifacts")
+                .withArguments("mergeTestArtifacts", "--stacktrace")
                 .withPluginClasspath()
                 .withJacoco()
                 .withDebug(true)
@@ -63,6 +61,6 @@ class WhenReportFilesAreMissing {
         Assert.assertTrue(result.task(":mergeTestArtifacts")!!.outcome == SUCCESS)
         val reports = File(testProjectDir.root, "build/reports/uploadReports.json")
         Assert.assertTrue(reports.exists())
-        Assertions.assertMatches(EXPECTED_OUTPUT, reports.readText())
+        Assertions.assertMatches(Resources.readResource("MergeTestArtifacts/empty_output"), reports.readText())
     }
 }

@@ -1,5 +1,5 @@
 package com.brunodles.testartifacts.fileparser
 
 interface FileParser {
-    def parse(File file)
+    Map<String, Object> parse(File file)
 }

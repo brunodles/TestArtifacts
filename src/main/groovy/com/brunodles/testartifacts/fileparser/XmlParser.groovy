@@ -6,16 +6,16 @@ class XmlParser implements FileParser {
     def parser = new groovy.util.XmlParser(false, false, false)
 
     @Override
-    def parse(File file) {
+    Map<String, Object> parse(File file) {
         String text = file.text.replaceAll("(?smi)<!DOCTYPE.*?>", "")
         return nested(parser.parseText(text))
     }
 
-    static def nested(Node node) {
+    static Map<String, Object> nested(Node node) {
         return nested(node) { "${removeEspecialCharacters(it.name().toString())}List".toString() }
     }
 
-    static def nested(Node node, KeyNameBuilder nameBuilder) {
+    static Map<String, Object> nested(Node node, KeyNameBuilder nameBuilder) {
         def result = node.attributes()
         def children = new LinkedHashMap<String, List<Map>>()
         node.children().each { child ->

@@ -20,7 +20,7 @@ enum ReportType implements FileParser {
     }
 
     @Override
-    def parse(File file) {
+    Map<String, Object> parse(File file) {
         return parser.parse(file)
     }
 

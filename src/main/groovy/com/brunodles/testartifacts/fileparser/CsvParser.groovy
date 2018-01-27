@@ -5,10 +5,10 @@ import static com.brunodles.testartifacts.helpers.StringUtils.underscoreToCamelC
 
 final class CsvParser implements FileParser {
     @Override
-    def parse(File file) {
+    Map<String, Object> parse(File file) {
         boolean header = true
         def fieldNames = []
-        def jsonRoot = new HashMap()
+        def jsonRoot = new HashMap<String, Object>()
         file.splitEachLine(",") { fields ->
             if (header) {
                 fieldNames = fields.collect { underscoreToCamelCase(it.toLowerCase()) }

@@ -1,0 +1,24 @@
+{
+  "name": "report-analyzer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "neutrino build",
+    "start": "neutrino start",
+    "lint": "neutrino lint",
+    "test": "neutrino test"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-hot-loader": "^3.1.3"
+  },
+  "devDependencies": {
+    "@neutrinojs/jest": "^8.0.18",
+    "@neutrinojs/react": "^8.0.18",
+    "@neutrinojs/standardjs": "^8.0.18",
+    "neutrino": "^8.0.18"
+  }
+}

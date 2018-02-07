@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>TestArtifacts</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script type="text/javascript" src="last.json"></script>
+    <!-- <script src="https://unpkg.com/material-ui@1.0.0-beta.32/umd/material-ui.production.min.js"></script> -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      function Title(prop) {
+        return (<div>
+          <h1>{prop.name}</h1>
+          </div>);
+      };
+      function Totals(prop) {
+        const result = Object.keys(prop.data).map((key) => {
+            return <p>{key} - {JSON.stringify(prop.data[key])}</p>;
+        });
+        return (<p>{result}</p>);
+      }
+      function Module(prop) {
+        return (<div>
+          <h2>{prop.name}</h2>
+          <Totals data={prop.data.totals} />
+          </div>);
+      };
+      function Modules(prop) {
+        const result = Object.keys(prop.data).map((key) => {
+          return <Module key={key} name={key} data={prop.data[key]} />;
+        });
+        return (<div>{result}</div>);
+      };
+
+      function Report(prop) {
+        return (<div>
+          <Title name={prop.data.testartifacts.buildInfo.projectName}/>
+          <Modules data={prop.data}/>
+          </div>);
+      };
+      ReactDOM.render(
+        <Report data={data}/>,
+        document.getElementById('root')
+      );
+
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      To set up a production-ready React build environment, follow these instructions:
+      * https://reactjs.org/docs/add-react-to-a-new-app.html
+      * https://reactjs.org/docs/add-react-to-an-existing-app.html
+
+      You can also use React without JSX, in which case you can remove Babel:
+      * https://reactjs.org/docs/react-without-jsx.html
+      * https://reactjs.org/docs/cdn-links.html
+    -->
+  </body>
+</html>

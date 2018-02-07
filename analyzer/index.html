@@ -7,6 +7,7 @@
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
     <script type="text/javascript" src="last.json"></script>
+    <script type="text/javascript" src="https://unpkg.com/less@2.7.3/dist/less.js"></script>
     <!-- <script src="https://unpkg.com/material-ui@1.0.0-beta.32/umd/material-ui.production.min.js"></script> -->
   </head>
   <body>
@@ -17,11 +18,43 @@
           <h1>{prop.name}</h1>
           </div>);
       };
+      const root = this;
+      function TotalsCheckstyleErrors(prop) {
+        return (<p>{prop.name} - {prop.data}</p>);
+      }
+      function TotalsCoverage(prop) {
+        return (<div>
+          <h3>Coverage</h3>
+          <p>Covered {prop.data.covered}</p>
+          <p>Missed {prop.data.missed}</p>
+          <p>Covered Rate {prop.data.coveredRate}</p>
+          </div>);
+      }
+      function TotalsTest(prop) {
+        return (<div>
+          <h3>Test</h3>
+          <p>Success {prop.data.success}</p>
+          <p>Failures {prop.data.failures}</p>
+          <p>Errors {prop.data.errors}</p>
+          <p>skipped {prop.data.skipped}</p>
+          <p>Success Rate {prop.data.successRate}</p>
+          </div>);
+      }
+      function TotalsNotFound(prop) {
+        return (<p>{prop.name} - report type not found!</p>);
+      }
+      const TOTALS_COMPONENTS = {
+        checkstyleErrors : TotalsCheckstyleErrors,
+        coverage : TotalsCoverage,
+        test : TotalsTest,
+        unknown : TotalsNotFound
+      }
       function Totals(prop) {
         const result = Object.keys(prop.data).map((key) => {
-            return <p>{key} - {JSON.stringify(prop.data[key])}</p>;
+            const TagName = TOTALS_COMPONENTS[key] || TOTALS_COMPONENTS["unknown"];
+            return (<TagName key={key} name={key} data={prop.data[key]} />);
         });
-        return (<p>{result}</p>);
+        return (<div>{result}</div>);
       }
       function Module(prop) {
         return (<div>

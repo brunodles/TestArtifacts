@@ -6,7 +6,16 @@ import com.brunodles.testartifacts.helpers.StringUtils.underscoreToCamelCase
 import java.io.File
 import java.util.*
 
-class CsvParser : FileParser {
+/**
+ * Parse CSV file into a Json
+ * It will use the 3 firsts values as an item key.
+ * Inside that item it will use the headers name as key and read each line to fill it.
+ */
+class CsvParser(val keyBuilder: (fields: List<String>) -> String) : FileParser {
+
+    /**
+     * Parse Csv File to Json
+     */
     override fun parse(file: File): Map<String, Any?> {
         var header = true
         var fieldNames: List<String> = emptyList()
@@ -21,7 +30,7 @@ class CsvParser : FileParser {
             fieldNames.forEachIndexed { index, fieldName ->
                 values.put(fieldName, fields[index])
             }
-            val key = "${fields[0]}_${fields[1]}_${fields[2]}"
+            val key = keyBuilder(fields)
             jsonRoot.put(removeEspecialCharacters(key), values)
         }
         return jsonRoot

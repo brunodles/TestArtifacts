@@ -6,19 +6,33 @@ import groovy.util.XmlParser
 import java.io.File
 import java.util.*
 
+/**
+ * Parse XML to JSON.
+ * It will convert child to a key, using it's own name.
+ * We will also ignore `DOCTYPE`, since it may prevent us to read the file.
+ */
 class XmlParser : FileParser {
     val parser = XmlParser(false, false, false)
 
+    /**
+     * Parse XML to a nested Map, like a JSON structure.
+     */
     override fun parse(file: File): Map<String, Any?> {
         val text = file.readText().replace("(?smi)<!DOCTYPE.*?>".toRegex(), "")
         return nested(parser.parseText(text))
     }
 
-    companion object {
+    private companion object {
+        /**
+         * Parse nested items, walks through each node to Map
+         */
         fun nested(node: Node): Map<String, Any?> {
             return nested(node) { "${removeEspecialCharacters(it.name().toString())}List" }
         }
 
+        /**
+         * Parse nested items, walks through each node to Map
+         */
         fun nested(node: Node, nameBuilder: (Node) -> String): Map<String, Any?> {
             var result: MutableMap<String, Any?> = node.attributes().mapKeys { it.key.toString() }.toMutableMap()
             val children = LinkedHashMap<String, MutableList<Map<String, Any?>>>()
@@ -37,8 +51,11 @@ class XmlParser : FileParser {
             return result
         }
 
+        /**
+         * Return the children by name if it's on the list and not null.
+         * Otherwise return a new List
+         */
         private fun childWithName(children: LinkedHashMap<String, MutableList<Map<String, Any?>>>, name: String) =
                 if (children.containsKey(name)) children[name] ?: LinkedList() else LinkedList()
-
     }
 }

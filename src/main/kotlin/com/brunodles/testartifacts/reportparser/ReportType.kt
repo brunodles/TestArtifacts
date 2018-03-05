@@ -7,9 +7,9 @@ import com.brunodles.testartifacts.fileparser.ParserFactory.XML
 import java.io.File
 
 enum class ReportType constructor(private val parser: FileParser, val totalizerClass: Class<out ReportTotalizer>?) : FileParser {
-    checkstyle(ParserFactory.XML, CheckstyleTotalizer::class.java),
+    checkstyle(XML, CheckstyleTotalizer::class.java),
     jacoco(XML, JacocoXmlTotalizer::class.java),
-    jacocoCsv(CSV, null),
+    jacocoCsv(CSV, JacocoCsvTotalizer::class.java),
     lint(XML, null),
     test(XML, TestTotalizer::class.java);
 

@@ -52,6 +52,7 @@ class JacocoCsvTest {
                 .withArguments("mergeTestArtifacts", "--stacktrace")
                 .withPluginClasspath()
                 .withJacoco()
+                .withDebug(true)
                 .build()
         val reports = File(testProjectDir.root, "build/reports/uploadReports.json")
         val expected = Resources.readResource("MergeTestArtifacts/jacococsv_output")
